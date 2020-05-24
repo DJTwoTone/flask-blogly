@@ -1,6 +1,7 @@
 """Models for Blogly."""
 
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -28,9 +29,32 @@ class User(db.Model):
                             nullable=False,
                             default='https://images.pexels.com/photos/4273375/pexels-photo-4273375.jpeg')
 
-    def create_user(self, firstname, lastname, imageurl):
-        new_user = User(first_name=firstname, last_name=lastname, image_url=imageurl)
-        db.session.add(new_user)
+
+    
+    def edit_user(self, firstname, lastname, imageurl):
+        self.first_name = firstname
+        self.last_name = lastname
+        self.image_url = imageurl
         db.session.commit()
-        
-    # def edit_user(self)
+
+    def delete_user(self):
+        db.session.delete(self)
+        db.session.commit()
+
+
+class Post(db.Model):
+    """A class for posts"""
+
+    __tablename__ = "posts"
+
+    id = db.Column(db.Integer, primary_key=true, autoincrement=True)
+    title = db.Column(db.String(140), nullable=False)
+    content = db.Column(db.String, nullable=False)
+    created_at = db.Column(db.Datetime, nullable=False, default=datetime.now)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+
+def create_user(firstname, lastname, imageurl):
+    new_user = User(first_name=firstname, last_name=lastname, image_url=imageurl)
+    db.session.add(new_user)
+    db.session.commit()

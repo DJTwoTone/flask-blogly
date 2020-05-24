@@ -1,7 +1,7 @@
 """Blogly application."""
 
 from flask import Flask, request, render_template, redirect, flash, session
-from models import db, connect_db, User
+from models import db, connect_db, User, create_user
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
@@ -32,11 +32,11 @@ def new_user():
 @app.route('/users/new', methods=["POST"])
 def add_new_user():
     
-    firstname = request.form["firstname"] if request.form["firstname"] else None
-    lastname = request.form['lastname'] if request.form["lastname"] else None
-    imageurl = request.form['imageurl'] if request.form["imageurl"] else None
+    firstname = request.form["firstname"] #if request.form["firstname"] else None
+    lastname = request.form['lastname'] #if request.form["lastname"] else None
+    imageurl = request.form['imageurl'] #if request.form["imageurl"] else None
 
-    User.create_user(firstname, lastname, imageurl)
+    create_user(firstname, lastname, imageurl)
     
     return redirect('/users')
 
@@ -52,13 +52,34 @@ def edit_user(user_id):
 
     return render_template('edit-user-details.html', user=user)
 
-# @app.route('/users/<user_id>/edit', methods=['POST'])
-# def save_edit_user(user_id):
+@app.route('/users/<user_id>/edit', methods=['POST'])
+def save_edit_user(user_id):
     
-#     firstname = request.form["fname"]
-#     lastname = request.form['lname']
-#     imageurl = request.form['imurl']
+    firstname = request.form["firstname"]
+    lastname = request.form['lastname']
+    imageurl = request.form['imageurl']
+
+    user = User.query.get_or_404(user_id)
+
+    user.edit_user(firstname, lastname, imageurl)
+
+    return redirect('/users')
+
+@app.route('/users/<user_id>/delete', methods=['POST'])
+def delete_user(user_id):
+
+    user = User.query.get_or_404(user_id)
+
+    user.delete_user()
+    
+    return redirect('/users')
+
+@app.route('GET /users/<user-id>/posts/new')
+def posting_form(user_id):
+
+    user = User.query.get_or_404(user_id)
 
 
+    return render_template('post-form.html', user=user)    
 
 

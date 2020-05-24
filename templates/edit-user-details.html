@@ -8,19 +8,24 @@
     <form action="/users/{{user.id}}/edit" method="POST">
         <div class="form-group">
           <label for="firstname">First Name</label>
-          <input type="text" class="form-control" name="fname" id="fname" placeholder="{{user.first_name}}">
+          <input type="text" class="form-control" name="firstname" id="firstname" value="{{user.first_name}}">
         </div>
         <div class="form-group">
           <label for="lastname">Last Name</label>
-          <input type="text" class="form-control" name="lname" id="lname" placeholder="{{user.last_name}}">
+          <input type="text" class="form-control" name="lastname" id="lastname" value="{{user.last_name}}">
         </div>
         <div class="form-group">
           <label for="imageurl">Image URL</label>
-          <input type="url" class="form-control" name="imurl" id="imurl" placeholder="{{user.image_url}}">
+          <input type="url" class="form-control" name="imageurl" id="imageurl" value="{{user.image_url}}">
         </div>
         
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-primary">SUBMIT</button>
       </form>
+      <form action="/users/{{ user.id }}">
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary">CANCEL</button>
+      </div>
+    </form>
 
 </div>
 
