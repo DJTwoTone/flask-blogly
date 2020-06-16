@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %} Tags {% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h2>TAGS</h2>
+    {% if tags|length %}
+        <ul>
+            {% for tag in tags %}
+            <li><a href="/tags/{{tag.id}}">{{ tag.name }}</a></li>
+            {% endfor%}
+        </ul>
+
+    {% else %}
+        <p>No Tags Yet</p>
+    {% endif %}
+    <a href="/" class="btn btn-light">CANCEL</a>
+    <a href="/tags/new" class="btn btn-success">ADD TAG</a>
+</div>
+
+{% endblock %}

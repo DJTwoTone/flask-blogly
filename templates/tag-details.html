@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title%}{{tag.name}}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{tag.name}}</h1>
+
+        <a href="/tags" class="btn btn-light">CANCEL</a>
+        <a href="/tags/{{tag.id}}/edit" class="btn btn-primary">EDIT TAG</a>
+
+    </div>    
+{% endblock %}

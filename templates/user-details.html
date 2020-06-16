@@ -9,17 +9,27 @@
     <div class="card" style="width: 18rem;">
         <img src="{{user.image_url}}" class="card-img-top" alt="...">
         <div class="card-body">
-          <p class="card-text">{{ user.first_name }}</p>
-          <p class="card-text">{{ user.last_name }}</p>
+          <h2 class="card-text">{{ user.first_name }} {{user.last_name}}</h2>
         </div>
         <form action="/users/{{ user.id }}/edit">
             <button type="submit" class="btn btn-primary">EDIT</button>
         </form>
+        <a href=""></a>
         <form action="/users/{{ user.id }}/delete" method="POST">
             <button type="submit" class="btn btn-danger">DELETE</button>
         </form>
+        <h3>POSTS</h3>
+        {% if user.posts|length %}
+          <ul>
+            {% for post in user.posts %}
+            <li><a href="/posts/{{ post.id}}">{{ post.title }}</a></li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No Posts Yet</p>
+        {% endif %}
+        <a href="/users/{{ user.id }}/posts/new" class="btn btn-primary">ADD POST</a>
       </div>
-
 </div>
 
 

@@ -18,14 +18,10 @@
           <label for="imageurl">Image URL</label>
           <input type="url" class="form-control" name="imageurl" id="imageurl" value="{{user.image_url}}">
         </div>
-        
+        <a href="/users/{{user.id}}" class="btn btn-light">CANCEL</a>     
         <button type="submit" class="btn btn-primary">SUBMIT</button>
       </form>
-      <form action="/users/{{ user.id }}">
-      <div class="form-group">
-        <button type="submit" class="btn btn-primary">CANCEL</button>
-      </div>
-    </form>
+
 
 </div>
 

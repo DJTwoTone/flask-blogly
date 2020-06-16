@@ -28,9 +28,8 @@ class User(db.Model):
     image_url = db.Column(db.String,
                             nullable=False,
                             default='https://images.pexels.com/photos/4273375/pexels-photo-4273375.jpeg')
+    posts = db.relationship('Post', backref='user')
 
-
-    
     def edit_user(self, firstname, lastname, imageurl):
         self.first_name = firstname
         self.last_name = lastname
@@ -47,14 +46,67 @@ class Post(db.Model):
 
     __tablename__ = "posts"
 
-    id = db.Column(db.Integer, primary_key=true, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(140), nullable=False)
     content = db.Column(db.String, nullable=False)
-    created_at = db.Column(db.Datetime, nullable=False, default=datetime.now)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created_at = db.Column(db.TIMESTAMP, nullable=False, default=datetime.now())
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
+    
+
+    def edit_post(self, title, content):
+        self.title = title
+        self.content = content
+        db.session.commit()
+
+    def delete_post(self):
+
+        db.session.delete(self)
+        db.session.commit()
+
+class Tag(db.Model):
+    """A class for tags to be added to posts"""
+
+    __tablename__ = "tags"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(50), nullable=False)
+    posts = db.relationship('Post', secondary='posttags', backref='tags')
+    
+
+    def edit_tag(self, name):
+        self.name = name
+        db.session.commit()
+
+    def delete_tag(self):
+        db.session.delete(self)
+        db.session.commit()
+
+        
+class PostTag(db.Model):
+    """A class for the post/tag join table"""
+
+    __tablename__ = "posttags"
+
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), primary_key=True)
+
 
 
 def create_user(firstname, lastname, imageurl):
     new_user = User(first_name=firstname, last_name=lastname, image_url=imageurl)
     db.session.add(new_user)
+    db.session.commit()
+
+def create_post(title, content, user_id, tags):
+    post = Post(title=title, content=content, user_id=user_id)
+    db.session.add(post)
+    
+    for tag in tags:
+        id = int(tag)
+        post.tags.append(Tag.query.get_or_404(id))
+    db.session.commit()
+
+def create_tag(name):
+    tag = Tag(name=name)
+    db.session.add(tag)
     db.session.commit()
